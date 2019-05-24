@@ -7,5 +7,5 @@ It automatically change your Aorus laptop's keyboard backlightning profiles when
 ![AorusFusion profiles names](https://raw.githubusercontent.com/Shamilius/AorusFusionMod/master/DemoFiles/2019-05-24_13-58-55.png)
 3) *\*Optional:\** add AorusFusionMod.exe to system startup.
 
-# Video demonstration
+# YouTube Demo
 [![YouTube Demo](https://img.youtube.com/vi/A9jC1c7-eUA/0.jpg)](https://www.youtube.com/watch?v=A9jC1c7-eUA)
