@@ -8,4 +8,4 @@ It automatically change your Aorus laptop's keyboard backlightning profiles when
 3) *\*Optional:\** add AorusFusionMod.exe to system startup.
 
 # Video demonstration
-[![YouTube Demo](https://img.youtube.com/vi/VID/0.jpg)](https://youtu.be/A9jC1c7-eUA)
+[![YouTube Demo]](https://youtu.be/A9jC1c7-eUA)
