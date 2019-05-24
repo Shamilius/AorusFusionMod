@@ -1,5 +1,5 @@
 # What AorusFusionMod can do?
-It automatically change your Aorus laptop's keyboard backlightning profiles when you switch programs.
+It automatically change Aorus laptop keyboard backlighting profiles when you switch programs.
 
 # How to use it?
 1) Put AorusFusionMod.exe in your AorusFusion folder  and run it (default C:\Program Files (x86)\AorusFusion).
