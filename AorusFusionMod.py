@@ -4,6 +4,15 @@
 import ctypes, sys, os, win32process, win32gui, win32con, win32api, subprocess, xml.etree.ElementTree as ET
 from time import sleep
 
+#print(subprocess.STD_OUTPUT_HANDLE)
+
+#sleep(1)
+
+#os.startfile(r'C:\Program Files (x86)\AorusFusion\switchProfile1.exe')
+#os.system('"'+Profiles[SetProfile][0]+'"')
+#subprocess.call(r'C:\Program Files (x86)\AorusFusion\switchProfile1.exe', shell=True)
+
+#sys.exit()
 
 #   Check if program runs with administrator rights
 def is_admin():
@@ -18,6 +27,9 @@ print('Program runs with administrator rights:', bool(is_admin()))
 if not is_admin() and sys.argv[0][sys.argv[0].__len__()-3:] != '.py': 
     ctypes.windll.shell32.ShellExecuteW(None, "runas", sys.executable, __file__, None, 1)
     sys.exit()
+
+#   Remove useless Vista_EQ_C.exe which runs with profile change
+if os.path.exists('Vista_EQ_C.exe'): os.remove('Vista_EQ_C.exe')
 
 
 AorusFusionPath = os.environ['PROGRAMFILES']+'\\AorusFusion\\'
@@ -35,16 +47,22 @@ CurrentProfile = -1
 #   }, 1558615973]
 #
 def LoadProfiles():
-    if not os.path.isfile(ProfileDataXML): sys.exit()
     Profiles = dict()
 
-    for Profile in ET.parse(ProfileDataXML).getroot():
+    #   Read ProfileData.xml
+    try:
+        ProfilesXML = ET.parse(ProfileDataXML).getroot()
+    except Exception as e:
+        print('Exception reading '+ProfileDataXML+':', e)
+        sys.exit()
+
+    for Profile in ProfilesXML:
         for ProfileData in Profile:
             if ProfileData.tag != 'Name': continue
             if ProfileData.text == 'null': continue
 
             App = ProfileData.text.lower()
-            Profiles[Profile.attrib['ID']] = [AorusFusionPath+'switchProfile'+Profile.attrib['ID']+'.exe', (App if App.find('.exe') > -1 else '')]
+            Profiles[Profile.attrib['ID']] = ['switchProfile'+Profile.attrib['ID']+'.exe', (App if App.find('.exe') > -1 else '')]
 
     print('Profiles:', Profiles)
     return [Profiles, os.stat(ProfileDataXML)[8]]
@@ -65,7 +83,7 @@ while True:
         hndl = win32api.OpenProcess(win32con.PROCESS_QUERY_INFORMATION | win32con.PROCESS_VM_READ, 0, win32process.GetWindowThreadProcessId(hwnd)[1])
     except Exception as e:
         sleep(1)
-        print('Exception', e)
+        print('Exception:', e)
         #   Maybe AorusFusion is opened - check if ProfileData.xml was changed
         if ProfilesDataModified != os.stat(ProfileDataXML)[8]: Profiles, ProfilesDataModified = LoadProfiles()
         continue
@@ -96,9 +114,8 @@ while True:
             SetProfile = Profile
     
     if CurrentProfile != SetProfile:
-        os.startfile(Profiles[SetProfile][0])
-        #os.system('"'+Profiles[SetProfile][0]+'"')
-        #subprocess.call([Profiles[SetProfile][0]], shell=True)
+        subprocess.Popen([Profiles[SetProfile][0]])
+        #os.startfile(Profiles[SetProfile][0])
         CurrentProfile = SetProfile
 
     LastWindow = ActiveWindow
